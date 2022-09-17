@@ -5,6 +5,7 @@ function LoginScreen() {
       <h1>Clinica Phayan</h1>
       <input type='text' />
       <br />
+      <br />
       <input type='password' />
       <br />
       <button onSubmit />
