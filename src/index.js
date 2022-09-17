@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import Header from './components/header';
 import LoginScreen from './screens/LoginScreen';
 import SchedulesScreen from './screens/SchedulesScreen';
 
