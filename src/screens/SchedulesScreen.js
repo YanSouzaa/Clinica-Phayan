@@ -4,7 +4,7 @@ import clinicaImg from '../img/clinica.png'
 import logout from '../img/logout.png'
 import menu from '../img/menu.png'
 import Modal from 'react-modal';
-
+import transactionalDbService from '../services/transactionalDbService.js';
 
 Modal.setAppElement('#root')
 
@@ -37,6 +37,18 @@ function SchedulesScreen() {
     setIsOpen(false);
   }
 
+  const handleSubmit = async (event)=>{
+    event.preventDefault();
+
+    const schedule = {
+      doctor_id:event.target.elements.doutor.value,
+      patient_id:event.target.elements.paciente.value,
+      date:event.target.elements.data.value,
+      hour:event.target.elements.horario.value,
+    }
+    await transactionalDbService.addSchedule(schedule)
+  }
+
 
   return (
     <div>
@@ -61,15 +73,15 @@ function SchedulesScreen() {
         
           <form method="POST">
             <h4>Paciente</h4>
-            <input  class="form-control" name="corpo"></input><br />
+            <input  class="form-control" name="paciente"></input><br />
             <h4>Doutor(a)</h4>
-            <input type={'text'} class="form-control" name="corpo"></input><br />
+            <input type={'text'} class="form-control" name="doutor"></input><br />
             <h4>Data</h4>
-            <input type={'date'}  class="form-control" name="corpo"></input><br />
+            <input type={'date'}  class="form-control" name="data"></input><br />
             <h4>Horario</h4>
-            <input type={'time'}  class="form-control" name="corpo"></input><br />
+            <input type={'time'}  class="form-control" name="horario"></input><br />
 
-            <button type="submit" class="btn btn-primary">Agendar</button>
+            <button type="submit" onSubmit={handleSubmit} class="btn btn-primary">Agendar</button>
           </form>
         </Modal>
         <h1>Agendamentos</h1>
