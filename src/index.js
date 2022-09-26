@@ -5,9 +5,12 @@ import LoginScreen from './screens/LoginScreen';
 import SchedulesScreen from './screens/SchedulesScreen';
 
 
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+  <Header/>
     <SchedulesScreen />
   </React.StrictMode>
 );
