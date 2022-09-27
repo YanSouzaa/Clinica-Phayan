@@ -13,5 +13,9 @@ const transactionalDbService = {
     addSchedule: async (schedule) => {
         return await axios.post(API_URL + '/schedule',schedule);
     },
+
+    getDoctors: async () => {
+        return await axios.get(API_URL + '/doctors');
+    }
 }
 export default transactionalDbService;

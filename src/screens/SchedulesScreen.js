@@ -22,9 +22,11 @@ const customStyles = {
 function SchedulesScreen() {
 
   let subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [doctors, setDoctors] = useState();
 
-  function openModal() {
+  const openModal = async () => {
+    setDoctors(await transactionalDbService.getDoctors());
     setIsOpen(true);
   }
 
