@@ -5,6 +5,7 @@ import logout from '../img/logout.png'
 import menu from '../img/menu.png'
 import Modal from 'react-modal';
 import transactionalDbService from '../services/transactionalDbService.js';
+import Select from 'react-select'
 
 Modal.setAppElement('#root')
 
@@ -23,10 +24,11 @@ function SchedulesScreen() {
 
   let subtitle;
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [doctors, setDoctors] = useState();
+  const [doctors, setDoctors] = useState([]);
 
   const openModal = async () => {
-    setDoctors(await transactionalDbService.getDoctors());
+    const retrievedDoctors = await transactionalDbService.getDoctors();
+    setDoctors(retrievedDoctors);
     setIsOpen(true);
   }
 
@@ -77,7 +79,7 @@ function SchedulesScreen() {
             <h4>Paciente</h4>
             <input  class="form-control" name="paciente"></input><br />
             <h4>Doutor(a)</h4>
-            <input type={'text'} class="form-control" name="doutor"></input><br />
+            <Select options={doctors} /><br />
             <h4>Data</h4>
             <input type={'date'}  class="form-control" name="data"></input><br />
             <h4>Horario</h4>
