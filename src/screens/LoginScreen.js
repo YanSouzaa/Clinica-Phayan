@@ -25,7 +25,7 @@ function LoginScreen() {
       <div className="input-group mb-3"style={{marginLeft:'30%',maxWidth:'40%'}}>
 
         <span className="input-group-text" id="basic-addon">#</span>
-        <input type='password' className="form-control"/>
+        <input type='password' placeholder='Password' className="form-control"/>
         <br />
 
       </div>

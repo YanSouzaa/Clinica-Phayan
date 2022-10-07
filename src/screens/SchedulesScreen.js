@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Schedule from "../components/Schedule";
-import clinicaImg from '../img/clinica.png'
 import logout from '../img/logout.png'
-import menu from '../img/menu.png'
 import Modal from 'react-modal';
 import transactionalDbService from '../services/transactionalDbService.js';
-import Select from 'react-select'
+import Select from 'react-select';
+
 
 Modal.setAppElement('#root')
 
@@ -22,80 +21,105 @@ const customStyles = {
 
 function SchedulesScreen() {
 
-  let subtitle;
+ 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [doctors, setDoctors] = useState([]);
+  const [schedules, setSchedules] = useState([]);
+
+  useEffect(() => {
+    const retrieveSchedules = async () => {
+      const retrievedSchedules = await transactionalDbService.getSchedules()
+      setSchedules(retrievedSchedules.data.Items)
+    
+    }
+    retrieveSchedules()
+  }, [])
+  schedules.sort(function (x, y) {
+    return x.id - y.id
+  })
 
   const openModal = async () => {
     const retrievedDoctors = await transactionalDbService.getDoctors();
-    setDoctors(retrievedDoctors);
+    setDoctors(retrievedDoctors.data.Items);
     setIsOpen(true);
   }
 
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = '#f00';
-  }
-
+  
   function closeModal() {
     setIsOpen(false);
   }
 
-  const handleSubmit = async (event)=>{
+  const handleSubmit = async (event) => {
+
     event.preventDefault();
 
     const schedule = {
-      doctor_id:event.target.elements.doutor.value,
-      patient_id:event.target.elements.paciente.value,
-      date:event.target.elements.data.value,
-      hour:event.target.elements.horario.value,
+     doctor_id: event.target.elements.doutor.value,
+     patient_id: event.target.elements.paciente.value,
+     date: event.target.elements.data.value,
+     hour: event.target.elements.horario.value,
     }
     await transactionalDbService.addSchedule(schedule)
+    document.location.reload()
   }
 
 
   return (
     <div>
-      <nav class="navbar navbar-light bg-primary" style={{ justifyContent: 'space-between' }}>
-        <a class="navbar-brand" onClick={openModal}>
-          <img class="rounded float-start" style={{ height: 45, width: 45, marginLeft:10 }} src={menu} />
-        </a>
-        <a class="navbar-brand" href="/">
-          <img class="rounded float-start" style={{ height: 45, width: 45, marginRigth: '20%' }} src={logout} />
+      <nav className="navbar navbar-light bg-primary" style={{ justifyContent: 'right' }}>
+
+        <a className="navbar-brand" href="/">
+          <img className="rounded float-start" style={{ height: 35, width: 35, marginRigth: '20%' }} src={logout} />
         </a>
       </nav>
       <div style={{ textAlign: 'center' }}>
-        <Modal
+      <Modal
           isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={customStyles}
-          contentLabel="Example Modal"
         >
           <h2>Novo agendamento:</h2>
-          <hr/>
-        
-          <form method="POST">
+          <hr />
+
+          <form>
             <h4>Paciente</h4>
-            <input  class="form-control" name="paciente"></input><br />
+            <input className='form-control' name="paciente"></input><br />
             <h4>Doutor(a)</h4>
-            <Select options={doctors} /><br />
+            <Select
+              options={doctors}
+
+            /><br />
             <h4>Data</h4>
-            <input type={'date'}  class="form-control" name="data"></input><br />
+            <input type={'date'} className="form-control" name="data"></input><br />
             <h4>Horario</h4>
-            <input type={'time'}  class="form-control" name="horario"></input><br />
+            <input type={'time'} className="form-control" name="horario"></input><br />
 
-            <button type="submit" onSubmit={handleSubmit} class="btn btn-primary">Agendar</button>
+            <button onClick={handleSubmit} className="btn btn-primary">Agendar</button>
           </form>
-        </Modal>
-        <h1>Agendamentos</h1>
+          </Modal>
         <br />
+        <div style={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row', height: 50, alignItems: 'center' }}>
+          <h1></h1>
+          <h1 style={{ marginLeft: '5%' }}>Agendamentos</h1>
 
-        <div class="card">
-          <table>
-            <Schedule id='1' paciente='Yan' medico='Dr Ramon' data='19/09/2022' horario='18:00' />
-            <Schedule id='2' paciente='Cuca' medico='Dr Dionéses' data='20/09/2022' horario='16:00' />
-            <Schedule id='3' paciente='Simas' medico='Dra Natasha' data='22/09/2022' horario='13:00' />
+          <button onClick={openModal} style={{ marginRight: '2%' }} className="btn btn-primary">Novo agendamento</button>
+        </div>
+        <br />
+      
+        <div style={{ justifyContent: 'center', display: 'flex' }}>
+          <table className="table table-striped" style={{ justifyContent: 'center',width: '80%', border: 'solid 3px #000', borderRadius:10,  }}>
+          <thead>
+            <tr style={{  backgroundColor: '#B0C4DE' }}>
+              <th>Paciente</th>
+              <th>Doutor</th>
+              <th>Data</th>
+              <th>Hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            {schedules.map((schedule) => <Schedule key={schedule.id} id={schedule.id} paciente={schedule.patient_id} medico={schedule.doctor_id} data={schedule.date} horario={schedule.hour} />)}
+          </tbody>
+
           </table>
         </div>
       </div>

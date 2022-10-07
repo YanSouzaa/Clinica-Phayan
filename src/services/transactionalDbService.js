@@ -11,7 +11,8 @@ const transactionalDbService = {
     },
 
     addSchedule: async (schedule) => {
-        return await axios.post(API_URL + '/schedule',schedule);
+        return await axios.post(API_URL + '/schedule',schedule)
+        ;
     },
 
     getDoctors: async () => {
