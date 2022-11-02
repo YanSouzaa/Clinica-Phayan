@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Schedule from "../components/Schedule";
-import logout from '../img/logout.png'
 import Modal from 'react-modal';
 import transactionalDbService from '../services/transactionalDbService.js';
 import Select from 'react-select';
+import Header from '../components/header'
 
 
 Modal.setAppElement('#root')
@@ -24,15 +24,16 @@ function SchedulesScreen() {
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [doctors, setDoctors] = useState([]);
+  const [patients, setPatients] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [values, setValues] = useState();
-  const [selectValue, setSelectValue] = useState([])
+  const [selectDoctorValue, setSelectDoctorValue] = useState([])
+  const [selectPatientValue, setSelectPatientValue] = useState([])
 
   useEffect(() => {
     const retrieveSchedules = async () => {
       const retrievedSchedules = await transactionalDbService.getSchedules()
       setSchedules(retrievedSchedules.data.Items)
-
     }
     retrieveSchedules()
   }, [])
@@ -43,6 +44,10 @@ function SchedulesScreen() {
   const openModal = async () => {
     const retrievedDoctors = await transactionalDbService.getDoctors();
     setDoctors(retrievedDoctors.data.Items);
+    const retrievedPatients = await transactionalDbService.getPatients();
+    setPatients(retrievedPatients.data.Items);
+    console.log(patients)
+    console.log(doctors)
     setIsOpen(true);
   }
   const handleChangeValues = value => {
@@ -52,10 +57,15 @@ function SchedulesScreen() {
     }))
   }
 
-  const handleChangeValuesSelect = (event) => {
-    setSelectValue(event.value)
+  const handleChangeDoctorValuesSelect = (event) => {
+    setSelectDoctorValue(event.value)
   }
-  const selectedOptionDoctor = doctors.find(e => e.value === selectValue
+  const handleChangePatientValuesSelect = (event) => {
+    setSelectPatientValue(event.value)
+  }
+  const selectedOptionPatient = doctors.find(e => e.value === selectPatientValue
+    )
+  const selectedOptionDoctor = doctors.find(e => e.value === selectDoctorValue
     )
 
 
@@ -68,8 +78,8 @@ function SchedulesScreen() {
     event.preventDefault();
 
     const schedule = {
-      doctor_id: selectValue,
-      patient_id: values.paciente,
+      doctor_id: selectDoctorValue,
+      patient_id: selectPatientValue,
       date: values.data,
       hour: values.horario,
     }
@@ -80,12 +90,9 @@ function SchedulesScreen() {
 
   return (
     <div>
-      <nav className="navbar navbar-light bg-primary" style={{ justifyContent: 'right' }}>
 
-        <a className="navbar-brand" href="/">
-          <img className="rounded float-start" style={{ height: 35, width: 35, marginRigth: '20%' }} src={logout} />
-        </a>
-      </nav>
+      <Header />
+
       <div style={{ textAlign: 'center' }}>
         <Modal
           isOpen={modalIsOpen}
@@ -97,13 +104,19 @@ function SchedulesScreen() {
 
           <form>
             <h4>Paciente</h4>
-            <input className='form-control' onChange={handleChangeValues} type='text' name="paciente"></input><br />
+            <Select
+              name='paciente'
+              placeholder='Selecione'
+              options={patients}
+              onChange={handleChangePatientValuesSelect}
+              value={selectedOptionPatient}
+            /><br />
             <h4>Doutor(a)</h4>
             <Select
               name='doutor'
               placeholder='Selecione'
               options={doctors}
-              onChange={handleChangeValuesSelect}
+              onChange={handleChangeDoctorValuesSelect}
               value={selectedOptionDoctor}
             /><br />
             <h4>Data</h4>
