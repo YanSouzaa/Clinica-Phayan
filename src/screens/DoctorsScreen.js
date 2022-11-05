@@ -93,11 +93,11 @@ function DoctorsScreen() {
           </form>
         </Modal>
         <br />
-        <div style={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row', height: 50, alignItems: 'center' }}>
+        <div style={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row', height: 50, alignItems: 'center',marginTop:'2%' }}>
           <h1></h1>
-          <h1 style={{ marginLeft: '5%' }}>Doutores</h1>
+          <h1 style={{ marginLeft: '20%', fontSize:38 }}>Doutores</h1>
 
-          <button onClick={openModal} style={{ marginRight: '2%' }} className="btn btn-primary">Novo doutor(a)</button>
+          <button onClick={openModal} style={{ marginRight: '10%', backgroundColor:'#B0C4DE', color:'black',fontWeight:'bold' }} className="btn btn-dark btn-sm">Novo doutor(a)</button>
         </div>
         <br />
 

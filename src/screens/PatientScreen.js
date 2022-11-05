@@ -99,11 +99,11 @@ function PatientScreen() {
           </form>
         </Modal>
         <br />
-        <div style={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row', height: 50, alignItems: 'center' }}>
+        <div style={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row', height: 50, alignItems: 'center',marginTop:'2%' }}>
           <h1></h1>
-          <h1 style={{ marginLeft: '5%' }}>Pacientes</h1>
+          <h1 style={{ marginLeft: '20%', fontSize:38 }}>Pacientes</h1>
 
-          <button onClick={openModal} style={{ marginRight: '2%' }} className="btn btn-primary">Novo paciente</button>
+          <button onClick={openModal} style={{ marginRight: '10%', backgroundColor:'#B0C4DE', color:'black',fontWeight:'bold' }} className="btn btn-dark btn-sm">Novo paciente</button>
         </div>
         <br />
 
